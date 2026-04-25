@@ -1,0 +1,252 @@
+:root {
+  color-scheme: light;
+  --bg: #efe8df;
+  --panel: rgba(248, 243, 237, 0.88);
+  --panel-strong: rgba(255, 251, 246, 0.95);
+  --line: rgba(77, 57, 49, 0.18);
+  --text: #2e2320;
+  --muted: #6a5853;
+  --accent: #a56f63;
+  --accent-deep: #7a4f46;
+  --shadow: 0 22px 60px rgba(68, 47, 42, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255, 244, 232, 0.9), transparent 34%),
+    linear-gradient(180deg, #f6eee7 0%, #e4d7cc 100%);
+  color: var(--text);
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+}
+
+.scene-frame {
+  position: relative;
+  width: min(1200px, 100%);
+  min-height: min(92vh, 920px);
+  overflow: hidden;
+  border-radius: 28px;
+  background: #e8ddd3;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.scene-background,
+.scene-overlay,
+.topbar,
+.dialogue-panel,
+.character-sprite {
+  position: absolute;
+}
+
+.scene-background {
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  transition: background-image 0.4s ease;
+}
+
+.scene-overlay {
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 249, 242, 0.1) 0%, rgba(31, 20, 19, 0.15) 100%),
+    linear-gradient(180deg, rgba(15, 10, 10, 0) 52%, rgba(15, 10, 10, 0.35) 100%);
+}
+
+.topbar {
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 28px 28px 0;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 242, 0.72);
+}
+
+.topbar h1 {
+  margin: 0;
+  color: #fff9f5;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  text-shadow: 0 8px 24px rgba(32, 22, 20, 0.35);
+}
+
+.character-sprite {
+  left: 50%;
+  bottom: 164px;
+  transform: translateX(-50%);
+  width: min(34vw, 420px);
+  max-height: 76%;
+  object-fit: contain;
+  object-position: bottom center;
+  z-index: 1;
+  filter: drop-shadow(0 20px 38px rgba(20, 12, 10, 0.22));
+}
+
+.dialogue-panel {
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3;
+  padding: 18px 18px 16px;
+  border-radius: 24px;
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 16px 38px rgba(38, 24, 21, 0.16);
+}
+
+.dialogue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.nameplate {
+  display: inline-flex;
+  align-items: center;
+  min-width: 78px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  color: var(--accent-deep);
+  font-weight: 700;
+}
+
+.dialogue-text {
+  margin: 0;
+  min-height: 116px;
+  line-height: 1.85;
+  font-size: clamp(16px, 1.5vw, 20px);
+  white-space: pre-line;
+}
+
+.choice-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.choice-button,
+.next-button,
+.ghost-button {
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.16s ease, background-color 0.16s ease, opacity 0.16s ease;
+}
+
+.choice-button {
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: rgba(255, 251, 248, 0.92);
+  border: 1px solid rgba(119, 87, 78, 0.12);
+  color: var(--text);
+}
+
+.choice-button:hover,
+.next-button:hover,
+.ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.choice-button:hover {
+  background: rgba(255, 247, 241, 0.98);
+}
+
+.next-button {
+  margin-top: 18px;
+  margin-left: auto;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 112px;
+  padding: 12px 18px;
+  background: linear-gradient(180deg, #b98073 0%, #976257 100%);
+  color: #fffaf8;
+}
+
+.ghost-button {
+  padding: 10px 14px;
+  background: rgba(255, 250, 247, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--accent-deep);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .game-shell {
+    padding: 10px;
+  }
+
+  .scene-frame {
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  .topbar {
+    padding: 18px 18px 0;
+  }
+
+  .topbar-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .character-sprite {
+    width: min(62vw, 360px);
+    bottom: 236px;
+  }
+
+  .dialogue-panel {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .dialogue-text {
+    min-height: 148px;
+  }
+
+  .dialogue-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

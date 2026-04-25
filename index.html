@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在見面之前</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="scene-frame">
+      <div class="scene-background" id="scene-background"></div>
+      <div class="scene-overlay"></div>
+      <img class="character-sprite" id="character-sprite" alt="角色立繪">
+      <div class="topbar">
+        <div>
+          <p class="eyebrow">Urban romance visual novel</p>
+          <h1>在見面之前</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-button" id="audio-toggle" type="button">音樂：開</button>
+          <button class="ghost-button" id="restart-top" type="button">重新開始</button>
+        </div>
+      </div>
+      <section class="dialogue-panel">
+        <div class="dialogue-header">
+          <span class="nameplate" id="speaker-name">旁白</span>
+          <button class="ghost-button" id="restart-bottom" type="button">重置進度</button>
+        </div>
+        <p class="dialogue-text" id="dialogue-text"></p>
+        <div class="choice-list" id="choice-list"></div>
+        <button class="next-button" id="next-button" type="button">繼續</button>
+      </section>
+    </section>
+  </main>
+  <audio id="bgm-player" loop preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
