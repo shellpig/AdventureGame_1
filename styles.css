@@ -136,33 +136,34 @@ button {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .nameplate {
   display: inline-flex;
   align-items: center;
-  min-width: 60px;
-  padding: 5px 11px;
+  min-width: 48px;
+  padding: 3px 9px;
   border-radius: 999px;
   background: var(--panel-strong);
   border: 1px solid var(--line);
   color: var(--accent-deep);
   font-weight: 700;
-  font-size: 14px;
-  transform: translateY(-3px);
+  font-size: 13px;
+  transform: translateY(-7px);
 }
 
 .dialogue-text {
   margin: 0;
-  min-height: 62px;
   line-height: 1.42;
   font-size: clamp(14px, 1.15vw, 17px);
   white-space: pre-line;
 }
 
 .dialogue-body {
-  padding-bottom: 2px;
+  height: calc(1.42em * 3 + 4px);
+  min-height: calc(1.42em * 3 + 4px);
+  padding-bottom: 0;
   flex: 0 1 auto;
   overflow: hidden;
 }
@@ -238,6 +239,7 @@ button {
   background: rgba(255, 250, 247, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.4);
   color: var(--accent-deep);
+  white-space: nowrap;
 }
 
 .hidden {
@@ -263,6 +265,13 @@ button {
     align-items: stretch;
   }
 
+  .topbar-actions .ghost-button {
+    min-width: 82px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
   .character-sprite {
     width: min(62vw, 360px);
     bottom: 190px;
@@ -280,12 +289,17 @@ button {
     min-height: 72px;
   }
 
+  .dialogue-body {
+    height: calc(1.42em * 4 + 4px);
+    min-height: calc(1.42em * 4 + 4px);
+  }
+
   .dialogue-controls {
-    min-height: 126px;
+    min-height: 98px;
   }
 
   .dialogue-header {
     align-items: flex-start;
-    flex-direction: column;
+    margin-bottom: 0;
   }
 }
