@@ -20,6 +20,7 @@ const assets = {
 
 const initialState = () => ({
   currentId: "intro_01",
+  pageIndex: 0,
   safety: 0,
   pressure: 0,
   recognition: 0,
@@ -48,6 +49,7 @@ const musicTracks = {
 let audioUnlocked = false;
 let audioEnabled = true;
 let currentTrackKey = "";
+let choiceUnlockTimer = null;
 
 const gameData = {
   intro_01: {
@@ -1012,6 +1014,20 @@ function updateAudioToggleLabel() {
   audioToggleEl.textContent = audioEnabled ? "音樂：開" : "音樂：關";
 }
 
+function getNodePages(node) {
+  const normalizedText = node.text.replace(/\n{2,}/g, "\n");
+  const lines = normalizedText.split("\n").filter((line) => line.trim().length > 0);
+
+  if (lines.length === 0) return [""];
+
+  const pages = [];
+  for (let i = 0; i < lines.length; i += 3) {
+    pages.push(lines.slice(i, i + 3).join("\n"));
+  }
+
+  return pages;
+}
+
 function playBgmForNode(nodeId) {
   const trackKey = getTrackForNode(nodeId);
 
@@ -1020,10 +1036,10 @@ function playBgmForNode(nodeId) {
     return;
   }
 
-  if (currentTrackKey !== trackKey) {
+  if (currentTrackKey !== trackKey || !bgmPlayerEl.src || !bgmPlayerEl.src.endsWith(musicTracks[trackKey])) {
     bgmPlayerEl.src = musicTracks[trackKey];
-    currentTrackKey = trackKey;
   }
+  currentTrackKey = trackKey;
 
   bgmPlayerEl.volume = trackKey === "tension" ? 0.5 : 0.42;
   const playPromise = bgmPlayerEl.play();
@@ -1079,6 +1095,10 @@ function applyEffects(effects = {}) {
 function restartGame() {
   const fresh = initialState();
   Object.assign(state, fresh);
+  if (choiceUnlockTimer) {
+    clearTimeout(choiceUnlockTimer);
+    choiceUnlockTimer = null;
+  }
   currentTrackKey = "";
   if (audioEnabled && audioUnlocked) {
     playBgmForNode(state.currentId);
@@ -1091,6 +1111,7 @@ function restartGame() {
 
 function goToNode(nextId) {
   state.currentId = nextId;
+  state.pageIndex = 0;
   renderNode();
 }
 
@@ -1099,6 +1120,7 @@ function renderNode() {
   if (node.branch) {
     const nextId = resolveEnding();
     state.currentId = nextId;
+    state.pageIndex = 0;
     node = gameData[nextId];
   }
 
@@ -1115,31 +1137,60 @@ function renderNode() {
   }
 
   speakerEl.textContent = node.speaker || "我";
-  textEl.textContent = node.text;
+  const pages = getNodePages(node);
+  const currentPage = pages[state.pageIndex] || pages[0];
+  const isLastPage = state.pageIndex >= pages.length - 1;
+
+  textEl.textContent = currentPage;
   choicesEl.innerHTML = "";
 
-  if (node.choices) {
+  if (node.choices && isLastPage) {
     nextEl.classList.add("hidden");
     node.choices.forEach((choice) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "choice-button";
       button.textContent = choice.text;
+      button.disabled = true;
       button.addEventListener("click", () => {
+        if (button.disabled) return;
         applyEffects(choice.effects);
         goToNode(choice.next);
       });
       choicesEl.appendChild(button);
     });
+
+    if (choiceUnlockTimer) {
+      clearTimeout(choiceUnlockTimer);
+    }
+
+    choiceUnlockTimer = setTimeout(() => {
+      choicesEl.querySelectorAll(".choice-button").forEach((button) => {
+        button.disabled = false;
+      });
+      choiceUnlockTimer = null;
+    }, 1000);
   } else {
-    nextEl.classList.toggle("hidden", !node.next);
-    nextEl.disabled = !node.next;
+    if (choiceUnlockTimer) {
+      clearTimeout(choiceUnlockTimer);
+      choiceUnlockTimer = null;
+    }
+    const shouldShowNext = !isLastPage || Boolean(node.next);
+    nextEl.classList.toggle("hidden", !shouldShowNext);
+    nextEl.disabled = !shouldShowNext;
   }
 }
 
 nextEl.addEventListener("click", () => {
   ensureAudioStarted();
   const node = gameData[state.currentId];
+  const pages = getNodePages(node);
+  if (state.pageIndex < pages.length - 1) {
+    state.pageIndex += 1;
+    renderNode();
+    return;
+  }
+
   if (node?.next) {
     goToNode(node.next);
   }
